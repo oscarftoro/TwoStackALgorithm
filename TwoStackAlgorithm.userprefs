@@ -1,0 +1,13 @@
+﻿<Properties StartupItem="TwoStackAlgorithm/TwoStackAlgorithm.fsproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="TwoStackAlgorithm/Component1.fs">
+    <Files>
+      <File FileName="TwoStackAlgorithm/Component1.fs" Line="14" Column="5" />
+      <File FileName="TwoStackAlgorithm/Script.fsx" Line="6" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
