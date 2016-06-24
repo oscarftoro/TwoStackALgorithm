@@ -8,48 +8,47 @@ open System.Collections
 module TwoStacksAlg =
 
     let expr1 = "(1+((2+3)*(4*5)))"
-    let array = expr1.ToCharArray() |> Array.toList
 
-    let c= 'c'
+    let list1 = expr1.ToCharArray() |> Array.toList
+  
+
     let isNum ch = Char.IsNumber(ch)
 
-     // six pomodoros and list of operators but not a list of operands
-    // take a list of expressions and create a list of operands and a list of operators
-    let rec lister list ops vals = 
-            match list with
-              | hd::hd1::tl when isNum hd && not (isNum hd1)               -> lister tl (hd1::ops) (hd::vals)
-              | hd::hd1::tl when (isNum hd || hd.Equals('.')) && isNum hd1 -> lister tl  ops (hd1::hd::vals)   
-              | hd::hd1::tl when not (isNum hd) && isNum hd1               -> lister tl (hd::ops) (hd1::vals)
-              | hd::tl      when not(isNum hd)                             -> lister tl (hd::ops) vals
-              | hd::tl      when isNum hd  || hd.Equals('.')               -> lister tl  ops (hd::vals)        
-              | ([] : char list)                                           -> ((ops: char list),(vals: char list))
-              | _                                                          -> raise (System.ArgumentException("Error on list argument"))
+    let drop i ls = List.rev ls |> List.take (ls.Length - i ) |> List.rev
 
-    let list = expr1.ToCharArray() |> Array.toList
-    Console.Out.WriteLine("hola");
+    //on encounterng right parenthesis...
+    //   - pop operator
+    //   - pop requisite number of operands
+    //   - push onto the operand stack the result of applying the operatos to those operands
+    let evalOp ops vals =
+        match ops with
+            | '+':: tl -> (List.tail(ops), List.head(vals) + (List.tail(vals) |> List.head |> float) :: drop 2 (vals))
+            | '*':: tl -> (List.tail(ops), List.head(vals) * (List.tail(vals) |> List.head |> float) :: drop 2 (vals))
+            | _ -> raise (System.ArgumentException("Not supported evalVal Operator")) 
+
     //push operands onto the operand stack
-    //push operators onto the operator stack
-    //ignore left parentheses
-    //on encounterng right parenthesis
-    //  - pop operator
-    //  - pop requisite number of operands
-    //  - push onto the operand stack the result of applying the operatos to those operands
+    let rec evalVal hd ops vals =
+        match hd with
+            | ' ' -> (ops,vals)
+            | '(' -> (ops,vals)
+            | '+' -> ('+'::ops,vals)
+            | '*' -> ('*'::ops,vals)
+            | ')' -> evalOp ops vals    //on encounterng right parenthesis...
+            | _  -> raise (System.ArgumentException("Not supported evalVal Operator")) 
+
+    
+    let rec twoStack list ops (vals : float list) =
+        match list with
+            | hd::tl when isNum(hd)       -> twoStack tl ops (Double.Parse((hd.ToString()))::vals) //push operators onto the operator stack
+            | hd::tl when not (isNum(hd)) -> let (ops1,vals1) = (evalVal hd ops vals)
+                                             in twoStack tl ops1 vals1
+            | ([]: char list)             -> vals
+            | _                           -> raise (System.ArgumentException("fail"))
+
+  
+ 
    
 
-    // i need to parse the string in order to evaluate the numbers
-    //otherwise is not going to work
-
-    let rec eval expr ops vals = 
-        match expr with
-         | " ":: t -> eval t ops vals
-         | "(":: t -> eval t ops vals
-         | "+":: t -> eval t ('+' :: ops) vals
-         | "*":: t -> eval t ('*' :: ops) vals
-         | x  :: t -> eval t ops (Double.Parse(x):: vals)
-         | []      -> (ops,vals)
-
-        
- 
   
     
 
